@@ -1,8 +1,8 @@
-package com.example.stealer.parsing.impl;
+package com.example.stealer.core.parsing;
 
-import com.example.stealer.entity.Site;
-import com.example.stealer.parsing.Parser;
-import com.example.stealer.parsing.ParsingResult;
+import com.example.stealer.core.entity.Site;
+import com.example.stealer.core.parsing.model.ParsingResult;
+import com.example.stealer.infrastructure.parsing.Parser;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,7 @@
-package com.example.stealer.parsing;
+package com.example.stealer.infrastructure.parsing;
 
-import com.example.stealer.entity.Site;
+import com.example.stealer.core.entity.Site;
+import com.example.stealer.core.parsing.model.ParsingResult;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -21,12 +22,12 @@ public abstract class Parser implements RunnableScheduledFuture {
     }
 
     @Override
-    public long getDelay(@org.jetbrains.annotations.NotNull TimeUnit timeUnit) {
+    public long getDelay(TimeUnit timeUnit) {
         return 0;
     }
 
     @Override
-    public int compareTo(@org.jetbrains.annotations.NotNull Delayed delayed) {
+    public int compareTo(Delayed delayed) {
         return 0;
     }
 
@@ -62,5 +63,5 @@ public abstract class Parser implements RunnableScheduledFuture {
         result = execute(site);
     }
 
-    abstract ParsingResult execute(Site site);//TODO add items to site with item validation
+    abstract ParsingResult execute(Site site); //TODO add items to site with item validation
 }

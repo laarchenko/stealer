@@ -1,4 +1,4 @@
-package com.example.stealer.entity;
+package com.example.stealer.core.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

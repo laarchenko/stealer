@@ -1,4 +1,4 @@
-package com.example.stealer.service;
+package com.example.stealer.infrastructure.service;
 
 import org.springframework.stereotype.Service;
 
