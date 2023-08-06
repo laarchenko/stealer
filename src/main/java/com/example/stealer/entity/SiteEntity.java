@@ -1,4 +1,4 @@
-package com.example.stealer.core.entity;
+package com.example.stealer.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "sites")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Site {
+public class SiteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,6 @@ public class Site {
     Boolean enabled;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
-    private List<Item> items;
-
-    // TODO:
+    private List<ItemEntity> items;
 
 }

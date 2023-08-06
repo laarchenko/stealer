@@ -4,3 +4,4 @@ spring:
     username: postgres
     password: password
 
+chrome-driver: "/home/vampir/soft/chromedriver"

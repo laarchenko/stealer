@@ -1,4 +1,4 @@
-package com.example.stealer.core.entity;
+package com.example.stealer.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-@Entity
-@Table(name = "prices")
 @Data
+@Entity
+@Table(name = "price")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Price {
+public class PriceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +20,9 @@ public class Price {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    Item item;
+    ItemEntity item;
 
     BigDecimal price;
 
-    LocalDateTime timestamp;
+    Instant timestamp;
 }
