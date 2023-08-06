@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
-import java.util.Map;
 
 @Data
 @Builder
@@ -23,4 +21,6 @@ public class Item {
     String pictureUrl;
 
     Size size;
+
+    Site site;
 }

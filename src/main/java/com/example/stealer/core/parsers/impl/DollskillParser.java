@@ -1,7 +1,8 @@
 package com.example.stealer.core.parsers.impl;
 
-import com.example.stealer.entity.ItemEntity;
+import com.example.stealer.core.parsers.Parser;
 import com.example.stealer.enums.Currency;
+import com.example.stealer.enums.SiteName;
 import com.example.stealer.enums.SizeType;
 import com.example.stealer.exception.ItemNameNotFoundException;
 import com.example.stealer.exception.ItemPriceNotFoundException;
@@ -14,8 +15,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,17 +28,14 @@ import static com.example.stealer.utils.StringUtils.removeSymbol;
 import static com.example.stealer.utils.WebElementUtils.resolveNonNull;
 
 @Component
-@Data
-public class DollskillParser {
+public class DollskillParser extends Parser {
 
-    @Value("$chrome-driver")
-    private String chromeDriver;
+    public DollskillParser( WebDriver driver) {
+        super(SiteName.DOLLSKILL, driver);
+    }
 
-   private final String mainUrl = "https://www.dollskill.com/products/obsidian-pocket-combat-boots";
-
-    public WebDriver driver;//set driver outside
-
-    private String getName() {
+    @Override
+    protected String getName() {
         var nameElementByStrictXpath = findElementBy(By.xpath("/html/body/div[7]/main/div/div[1]/div[2]/div/h1"));//full
         var nameElementByRelativeXpath = findElementBy(By.xpath("//*[@id=\"product-content\"]/div/h1"));
         var nameElementByCssSelector = findElementBy(By.cssSelector("#product-content > div > h1"));
@@ -51,7 +47,15 @@ public class DollskillParser {
                 nameElementByCssSelector).getText();
     }
 
-    private BigDecimal getPriceValue() {
+    @Override
+    protected Price getPrice() {
+        return Price.builder()
+                .value(getPriceValue())
+                .currency(Currency.USD)
+                .build();
+    }
+
+    protected BigDecimal getPriceValue() {
         //List<WebElement> elements = driver.findElements(By.className("product-price"));
         var priceElementByCssSelector = findElementBy(By.cssSelector("#product-content > div > p.product-price"));
         var priceElementByRelativeXpath = findElementBy(By.xpath("//*[@id=\"product-content\"]/div/p[1]"));
@@ -66,7 +70,8 @@ public class DollskillParser {
         return BigDecimal.valueOf(Double.parseDouble( removeSymbol((extractPriceValue(priceAsString)), "$")));
     }
 
-    private Size getSize() {
+    @Override
+    protected Size getSize() {
         WebElement sizes = driver.findElement(By.id("cart-options"));
         var sizeList = sizes.findElements(By.className("shorthand"));
         return Size.of(resolveSizeType(sizeList), resolveSizeValues(sizeList));
@@ -85,26 +90,11 @@ public class DollskillParser {
         return null;
     }
 
-    private String getPictureUrl() {
+    @Override
+    protected String getPictureUrl() {
         WebElement picture = driver.findElement(By.cssSelector("#image-container > div:nth-child(1) > a"));
-        System.out.println("PIC "+picture.getAttribute("href"));
-        return "PIC "+picture.getAttribute("href");//TODO maybe parse few pictures
-    }
-
-    public ItemParsingResult execute() {
-        var result= ItemParsingResult.builder()
-                .item(Item.builder()
-                        .name(getName())
-                        .price(Price.builder()
-                                .value(getPriceValue())
-                                .currency(Currency.USD)
-                                .build())
-                        .pictureUrl(getPictureUrl())
-                        .size(getSize())
-                        .build())
-                .build();
-        driver.quit();
-        return result;
+        System.out.println("PIC " + picture.getAttribute("href"));
+        return "PIC " + picture.getAttribute("href");//TODO maybe parse few pictures
     }
 
     private static Integer resolveSizeValue(WebElement element) {

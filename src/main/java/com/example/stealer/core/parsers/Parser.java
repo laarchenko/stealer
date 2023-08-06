@@ -1,33 +1,33 @@
 package com.example.stealer.core.parsers;
 
+import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.ApplicationException;
 import com.example.stealer.model.Item;
 import com.example.stealer.model.ItemParsingResult;
 import com.example.stealer.model.Price;
 import com.example.stealer.model.Size;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@Getter
+@Component
 @RequiredArgsConstructor
 public abstract class Parser {
 
+    protected final SiteName siteName;
+
     protected final WebDriver driver;
 
-    protected final List<String> itemUrls;
-
-    public List<ItemParsingResult> execute() {
-        return itemUrls.stream()
-                .map(this::geItemParsingResult)
-                .collect(Collectors.toList());
+    public ItemParsingResult execute(String url) {
+        return geItemParsingResult(url);
     }
 
     protected ItemParsingResult geItemParsingResult(String itemUrl) {
         try {
             return ItemParsingResult.builder()
-                    .item(resolveItem(itemUrl))
+                    .item(getItem(itemUrl))
                     .build();
         } catch (ApplicationException e) {
             return ItemParsingResult.builder()
@@ -36,11 +36,12 @@ public abstract class Parser {
         }
     }
 
-    protected Item resolveItem(String itemUrl) {
+    protected Item getItem(String itemUrl) {
         driver.get(itemUrl);
         return Item.builder()
+                .url(itemUrl)
                 .name(getName())
-                .price(getPriceValue())
+                .price(getPrice())
                 .pictureUrl(getPictureUrl())
                 .size(getSize())
                 .build();
@@ -48,7 +49,7 @@ public abstract class Parser {
 
     protected abstract String getName();
 
-    protected abstract Price getPriceValue();
+    protected abstract Price getPrice();
 
     protected abstract String getPictureUrl();
 

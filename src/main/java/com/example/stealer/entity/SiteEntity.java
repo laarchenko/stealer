@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-@Table(name = "sites")
+@Table(name = "site")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SiteEntity {
 

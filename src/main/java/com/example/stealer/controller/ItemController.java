@@ -1,22 +1,28 @@
 package com.example.stealer.controller;
 
+import com.example.stealer.config.WebDriverConfig;
 import com.example.stealer.core.parsers.ParsingTask;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 @RestController
 @RequestMapping("/items")
 public class ItemController {
 
     @Autowired
-    List<ParsingTask> parsers;
+    Executor executor;
 
-    @GetMapping("")
+    @Autowired
+    WebDriverConfig webDriverConfig;
+
+    @GetMapping("/")
+    @ResponseBody
     public List getAllItems() {
-        return parsers;
+        System.out.println(executor);
+        System.out.println(webDriverConfig);
+        return List.of();
     }
 }
