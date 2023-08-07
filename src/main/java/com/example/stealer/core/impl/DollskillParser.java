@@ -1,21 +1,17 @@
-package com.example.stealer.core.parsers.impl;
+package com.example.stealer.core.impl;
 
-import com.example.stealer.core.parsers.Parser;
+import com.example.stealer.core.Parser;
 import com.example.stealer.enums.Currency;
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.enums.SizeType;
 import com.example.stealer.exception.ItemNameNotFoundException;
 import com.example.stealer.exception.ItemPriceNotFoundException;
-import com.example.stealer.model.Item;
-import com.example.stealer.model.ItemParsingResult;
 import com.example.stealer.model.Price;
 import com.example.stealer.model.Size;
-import lombok.Data;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

@@ -4,4 +4,13 @@ spring:
     username: postgres
     password: password
 
-chrome-driver: "/home/vampir/soft/chromedriver"
+scheduling:
+    core-pool-size: 1
+    initial-delay: 0
+    period: 1
+    time-unit: MINUTES
+
+web-driver:
+    type: webdriver.chrome.driver
+    location: /home/vampir/soft/chromedriver
+    args: --remote-allow-origins=*

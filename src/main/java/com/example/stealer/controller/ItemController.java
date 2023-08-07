@@ -1,7 +1,6 @@
 package com.example.stealer.controller;
 
-import com.example.stealer.config.WebDriverConfig;
-import com.example.stealer.core.parsers.ParsingTask;
+import com.example.stealer.config.WebDriverConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +15,13 @@ public class ItemController {
     Executor executor;
 
     @Autowired
-    WebDriverConfig webDriverConfig;
+    WebDriverConfigurator webDriverConfigurator;
 
     @GetMapping("/")
     @ResponseBody
     public List getAllItems() {
         System.out.println(executor);
-        System.out.println(webDriverConfig);
+        System.out.println(webDriverConfigurator);
         return List.of();
     }
 }

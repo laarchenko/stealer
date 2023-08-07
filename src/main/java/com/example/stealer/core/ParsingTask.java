@@ -1,10 +1,8 @@
-package com.example.stealer.core.parsers;
+package com.example.stealer.core;
 
-import com.example.stealer.entity.ItemEntity;
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.NoParserForSiteException;
 import com.example.stealer.model.*;
-import com.example.stealer.entity.SiteEntity;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +10,6 @@ import lombok.experimental.FieldDefaults;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 @Data
 @RequiredArgsConstructor
@@ -28,7 +24,7 @@ public class ParsingTask implements Runnable {
     @Override
     public void run() {
 
-
+        //TODO ? get parsingInputList from db
         var results = parsingInputList.stream()
                 .filter(input -> input.getSite().getEnabled())
                 .map(input -> {
@@ -37,7 +33,7 @@ public class ParsingTask implements Runnable {
                 }).toList();
         results.forEach(System.out::println);
 
-        //driver.quit();
+        //driver.quit(); //TODO check quitting driver
     }
 
     private static Parser getParserBySiteName(List<Parser> parsers, SiteName siteName) {

@@ -1,4 +1,4 @@
-package com.example.stealer.core.parsers;
+package com.example.stealer.core;
 
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.ApplicationException;

@@ -1,8 +1,10 @@
 package com.example.stealer.entity;
 
+import com.example.stealer.enums.SiteName;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class SiteEntity {
     String name;
 
     Boolean enabled;
+
+    SiteName siteName;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
     private List<ItemEntity> items;
