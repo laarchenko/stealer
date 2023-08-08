@@ -3,6 +3,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/stealer
     username: postgres
     password: password
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    drop-first: true
 
 scheduling:
     core-pool-size: 1
@@ -14,3 +17,4 @@ web-driver:
     type: webdriver.chrome.driver
     location: /home/vampir/soft/chromedriver
     args: --remote-allow-origins=*
+

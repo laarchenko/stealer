@@ -1,7 +1,8 @@
 CREATE TABLE site (
                        id BIGINT PRIMARY KEY,
-                       name VARCHAR(255) NOT NULL,
-                       enabled BOOLEAN NOT NULL
+                       display_name VARCHAR(255) NOT NULL,
+                       enabled BOOLEAN NOT NULL,
+                       value VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE item (
@@ -34,3 +35,7 @@ CREATE TABLE price (
 );
 
 ALTER TABLE item ADD CONSTRAINT FK_item_price FOREIGN KEY (id) REFERENCES price (id) ON DELETE CASCADE;
+
+
+INSERT INTO site(id, display_name, enabled, value)
+VALUES (1, 'Dollskill', true, 'DOLLSKILL')

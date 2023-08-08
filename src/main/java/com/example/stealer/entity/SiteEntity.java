@@ -17,13 +17,16 @@ public class SiteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String name;
+    @Column(name = "display_name")
+    String displayName;
 
+    @Column(name = "enabled")
     Boolean enabled;
 
-    SiteName siteName;
+    @Enumerated(EnumType.STRING)
+    SiteName value;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
     private List<ItemEntity> items;
-
 }
+

@@ -1,27 +1,23 @@
 package com.example.stealer.controller;
 
-import com.example.stealer.config.WebDriverConfigurator;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.stealer.dto.CreateItemRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/item")
 public class ItemController {
 
-    @Autowired
-    Executor executor;
-
-    @Autowired
-    WebDriverConfigurator webDriverConfigurator;
-
-    @GetMapping("/")
+    @PostMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List getAllItems() {
-        System.out.println(executor);
-        System.out.println(webDriverConfigurator);
+    public List create(@RequestBody @Valid CreateItemRequest request) {
+
+
         return List.of();
     }
 }

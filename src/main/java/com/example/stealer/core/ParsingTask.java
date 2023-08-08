@@ -2,7 +2,7 @@ package com.example.stealer.core;
 
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.NoParserForSiteException;
-import com.example.stealer.model.*;
+import com.example.stealer.model.ParsingInput;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
