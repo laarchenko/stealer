@@ -17,7 +17,7 @@ public class WebDriverConfigurator {
     String location;
 
     @Value("${web-driver.args}")
-    String args;
+    String[] args;
 
     @Bean
     public WebDriver getWebDriver() {

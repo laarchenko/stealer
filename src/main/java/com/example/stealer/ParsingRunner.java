@@ -2,9 +2,7 @@ package com.example.stealer;
 
 import com.example.stealer.core.Parser;
 import com.example.stealer.core.ParsingTask;
-import com.example.stealer.enums.SiteName;
-import com.example.stealer.model.ParsingInput;
-import com.example.stealer.model.Site;
+import com.example.stealer.mapper.ItemMapper;
 import com.example.stealer.service.ItemService;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,27 +19,22 @@ public class ParsingRunner {
     private final List<Parser> parsers;
     private final ScheduledExecutorService executor;
     private final ItemService itemService;
+    private final ItemMapper itemMapper;
 
     ParsingRunner(
             @Value("${scheduling.initial-delay}") Integer initialDelay,
             @Value("${scheduling.period}") Integer period,
             @Value("${scheduling.time-unit}") String timeUnit,
-            WebDriver driver, List<Parser> parsers, ScheduledExecutorService executor, ItemService itemService) {
+            WebDriver driver, List<Parser> parsers, ScheduledExecutorService executor,
+            ItemService itemService, ItemMapper itemMapper) {
 
         this.itemService = itemService;
         this.driver = driver;
         this.parsers = parsers;
         this.executor = executor;
+        this.itemMapper = itemMapper;
 
-        var parsingInputList = List.of(ParsingInput.builder()
-                .url("https://www.dollskill.com/products/obsidian-pocket-combat-boots")
-                .site(Site.builder()
-                        .siteName(SiteName.DOLLSKILL)
-                        .enabled(true)
-                        .build())
-                .build());//change on working with items from db
-
-        executor.scheduleAtFixedRate(new ParsingTask(parsingInputList, driver, parsers),
+        executor.scheduleAtFixedRate(new ParsingTask(driver, parsers, itemService, itemMapper),
                 initialDelay, period, TimeUnit.valueOf(timeUnit));
     }
 

@@ -1,6 +1,5 @@
 package com.example.stealer.model;
 
-import com.example.stealer.enums.SizeType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
+
+    Long id;
 
     String url;
 

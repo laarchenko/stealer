@@ -16,5 +16,7 @@ scheduling:
 web-driver:
     type: webdriver.chrome.driver
     location: /home/vampir/soft/chromedriver
-    args: --remote-allow-origins=*
+    args: >
+      --remote-allow-origins=*,
+      --headless
 

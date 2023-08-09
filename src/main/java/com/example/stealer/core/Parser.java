@@ -2,7 +2,6 @@ package com.example.stealer.core;
 
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.ApplicationException;
-import com.example.stealer.model.Item;
 import com.example.stealer.model.ItemParsingResult;
 import com.example.stealer.model.Price;
 import com.example.stealer.model.Size;
@@ -26,25 +25,18 @@ public abstract class Parser {
 
     protected ItemParsingResult geItemParsingResult(String itemUrl) {
         try {
+            driver.get(itemUrl);
             return ItemParsingResult.builder()
-                    .item(getItem(itemUrl))
+                    .name(getName())
+                    .price(getPrice())
+                    .pictureUrl(getPictureUrl())
+                    .size(getSize())
                     .build();
         } catch (ApplicationException e) {
             return ItemParsingResult.builder()
                     .exception(e)
                     .build();
         }
-    }
-
-    protected Item getItem(String itemUrl) {
-        driver.get(itemUrl);
-        return Item.builder()
-                .url(itemUrl)
-                .name(getName())
-                .price(getPrice())
-                .pictureUrl(getPictureUrl())
-                .size(getSize())
-                .build();
     }
 
     protected abstract String getName();
