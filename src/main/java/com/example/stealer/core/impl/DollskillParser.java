@@ -5,8 +5,7 @@ import com.example.stealer.enums.SiteName;
 import com.example.stealer.enums.SizeType;
 import com.example.stealer.exception.ItemNameNotFoundException;
 import com.example.stealer.exception.ItemPriceNotFoundException;
-import com.example.stealer.model.Price;
-import com.example.stealer.model.Size;
+import com.example.stealer.model.ItemDetails;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -43,10 +42,10 @@ public class DollskillParser extends Parser {
     }
 
     @Override
-    protected Price getPrice() {
-        return Price.builder()
+    protected List<ItemDetails> getItemDetails() {
+        return List.of(ItemDetails.builder()
                 .price(getPriceValue())
-                .build();
+                .build());
     }
 
     protected BigDecimal getPriceValue() {
@@ -64,11 +63,10 @@ public class DollskillParser extends Parser {
         return BigDecimal.valueOf(Double.parseDouble( removeSymbol((extractPriceValue(priceAsString)), "$")));
     }
 
-    @Override
-    protected Size getSize() {
+    protected void getSize() {
         WebElement sizes = driver.findElement(By.id("cart-options"));
-        var sizeList = sizes.findElements(By.className("shorthand"));
-        return Size.of(resolveSizeType(sizeList), resolveSizeValues(sizeList));
+        var sizeList = sizes.findElements(By.className("shorthand"));//TODO Merge to itemDetails
+        //return Size.of(resolveSizeType(sizeList), resolveSizeValues(sizeList));
     }
 
     private static List<Integer> resolveSizeValues(List<WebElement> sizeList) {

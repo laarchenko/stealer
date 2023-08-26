@@ -2,13 +2,14 @@ package com.example.stealer.core;
 
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.ApplicationException;
+import com.example.stealer.model.ItemDetails;
 import com.example.stealer.model.ItemParsingResult;
-import com.example.stealer.model.Price;
-import com.example.stealer.model.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Getter
 @Component
@@ -28,9 +29,8 @@ public abstract class Parser {
             driver.get(itemUrl);
             return ItemParsingResult.builder()
                     .name(getName())
-                    .price(getPrice())
+                    .itemDetails(getItemDetails())
                     .pictureUrl(getPictureUrl())
-                    .size(getSize())
                     .build();
         } catch (ApplicationException e) {
             return ItemParsingResult.builder()
@@ -41,9 +41,7 @@ public abstract class Parser {
 
     protected abstract String getName();
 
-    protected abstract Price getPrice();
+    protected abstract List<ItemDetails> getItemDetails();
 
     protected abstract String getPictureUrl();
-
-    protected abstract Size getSize();
 }

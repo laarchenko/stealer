@@ -29,11 +29,11 @@ public class ParsingTask implements Runnable {
 
         var inputItems = getItemsToParse();
 
-        //var results = parseItems(inputItems);
+        var results = parseItems(inputItems);
         //TODO extract everything about parsing to parsing service
         //TODO rename ParsingTask
-        //results.forEach(System.out::println);
-        inputItems.forEach(System.out::println);
+        results.forEach(System.out::println);
+        //inputItems.forEach(System.out::println);
         //results.stream().map(ItemParsingResult::getItem).forEach(itemService::update);
         //driver.quit(); //TODO check quitting driver
     }

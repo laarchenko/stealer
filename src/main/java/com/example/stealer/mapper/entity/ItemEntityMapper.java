@@ -2,9 +2,12 @@ package com.example.stealer.mapper.entity;
 
 import com.example.stealer.entity.ItemDetailsEntity;
 import com.example.stealer.entity.ItemEntity;
+import com.example.stealer.entity.SiteEntity;
 import com.example.stealer.model.Item;
-import com.example.stealer.model.Price;
+import com.example.stealer.model.ItemDetails;
+import com.example.stealer.model.Site;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,22 +18,24 @@ import java.util.stream.Collectors;
 public abstract class ItemEntityMapper {
 
     @Autowired
-    PriceEntityMapper priceEntityMapper;
+    ItemDetailsEntityMapper itemDetailsEntityMapper;
 
     @Autowired
     SiteEntityMapper siteEntityMapper;
 
     public abstract ItemEntity toEntity(Item item);
 
+    @Mapping(target = "itemDetails", source = "itemDetails", qualifiedByName = "mapItemDetails")
+    @Mapping(target = "site", source = "site", qualifiedByName = "mapSite")
     public abstract Item toModel(ItemEntity entity);
 
-    @Named("mapPricesToEntities")
-    List<ItemDetailsEntity> mapPricesToEntities(List<Price> models) {
-        return models.stream().map(priceEntityMapper::toEntity).collect(Collectors.toList());
+    @Named("mapItemDetails")
+    protected List<ItemDetails> mapItemDetails(List<ItemDetailsEntity> entities) {
+        return entities.stream().map(itemDetailsEntityMapper::toModel).collect(Collectors.toList());
     }
 
-    @Named("mapPricesToModels")
-    List<Price> mapPricesToModels(List<ItemDetailsEntity> entities) {
-        return entities.stream().map(priceEntityMapper::toModel).collect(Collectors.toList());
+    @Named("mapSite")
+    protected Site mapSite(SiteEntity entity) {
+        return siteEntityMapper.toModel(entity);
     }
 }

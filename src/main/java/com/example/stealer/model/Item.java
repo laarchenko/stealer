@@ -17,13 +17,11 @@ public class Item {
 
     String url;
 
-    List<Price> prices;
+    List<ItemDetails> itemDetails;
 
     String name;
 
     String pictureUrl;
-
-    Size size;
 
     Site site;
 }
