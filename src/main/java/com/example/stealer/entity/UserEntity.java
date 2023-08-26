@@ -3,7 +3,9 @@ package com.example.stealer.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.List;
 
@@ -19,7 +21,9 @@ public class UserEntity {
 
     String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @HashCodeExclude
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_item",
             joinColumns = @JoinColumn(name = "user_id"),

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 
 @Data
 @Builder
@@ -15,7 +17,7 @@ public class Item {
 
     String url;
 
-    Price price;
+    List<Price> prices;
 
     String name;
 

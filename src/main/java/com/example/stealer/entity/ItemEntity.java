@@ -3,7 +3,9 @@ package com.example.stealer.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.List;
 
@@ -19,20 +21,21 @@ public class ItemEntity {
 
     String name;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    List<PriceEntity> prices;
+    @HashCodeExclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<ItemDetailsEntity> itemDetails;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "site_id")
-    private SiteEntity site;
+    @HashCodeExclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false)
+    SiteEntity site;
 
-    @ManyToMany(mappedBy = "items")
+    @HashCodeExclude
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "items", fetch = FetchType.EAGER)
     List<UserEntity> users;
 
     String url;
-
-    public void addPrice(PriceEntity price) {
-        prices.add(price);
-        price.setItem(this);
-    }
 }

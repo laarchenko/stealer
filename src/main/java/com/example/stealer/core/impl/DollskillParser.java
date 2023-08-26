@@ -1,7 +1,6 @@
 package com.example.stealer.core.impl;
 
 import com.example.stealer.core.Parser;
-import com.example.stealer.enums.Currency;
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.enums.SizeType;
 import com.example.stealer.exception.ItemNameNotFoundException;
@@ -46,8 +45,7 @@ public class DollskillParser extends Parser {
     @Override
     protected Price getPrice() {
         return Price.builder()
-                .value(getPriceValue())
-                .currency(Currency.USD)
+                .price(getPriceValue())
                 .build();
     }
 

@@ -12,9 +12,11 @@ public class Site {
 
     Long id;
 
+    String displayName;
+
     Boolean enabled;
 
-    SiteName siteName;
+    SiteName value;
 
-    String url;
+    List<Item> items;
 }

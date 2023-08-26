@@ -1,41 +1,52 @@
 CREATE TABLE site (
-                       id BIGINT PRIMARY KEY,
-                       display_name VARCHAR(255) NOT NULL,
-                       enabled BOOLEAN NOT NULL,
-                       value VARCHAR(255) NOT NULL
+                      id SERIAL PRIMARY KEY,
+                      display_name VARCHAR(255) NOT NULL,
+                      enabled BOOLEAN,
+                      value VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE item (
-    id      BIGINT PRIMARY KEY,
-    name    VARCHAR(255) NOT NULL,
-    site_id BIGINT,
-    url     VARCHAR(255) NOT NULL,
-    CONSTRAINT FK_item_site FOREIGN KEY (site_id) REFERENCES site (id) ON DELETE CASCADE
+                      id SERIAL PRIMARY KEY,
+                      name VARCHAR(255) NOT NULL,
+                      site_id BIGINT REFERENCES site(id) ON DELETE CASCADE,
+                      url VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE users (
-    id BIGINT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+                       id SERIAL PRIMARY KEY,
+                       name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE user_item (
-    user_id BIGINT NOT NULL,
-    item_id BIGINT NOT NULL,
-    CONSTRAINT PK_user_item PRIMARY KEY (user_id, item_id),
-    CONSTRAINT FK_user_item_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    CONSTRAINT FK_user_item_item FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE
+                           user_id BIGINT NOT NULL,
+                           item_id BIGINT NOT NULL,
+                           PRIMARY KEY (user_id, item_id),
+                           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                           FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE
 );
 
-CREATE TABLE price (
-                       id BIGINT PRIMARY KEY,
-                       item_id BIGINT NOT NULL,
-                       price NUMERIC(10, 2) NOT NULL,
-                       timestamp TIMESTAMP NOT NULL,
-                       CONSTRAINT FK_price_item FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE
+CREATE TABLE item_details (
+                              id SERIAL PRIMARY KEY,
+                              item_id BIGINT NOT NULL,
+                              price NUMERIC(10, 2) NOT NULL,
+                              currency VARCHAR(64) NOT NULL,
+                              size INT NOT NULL,
+                              size_type VARCHAR(64) NOT NULL,
+                              timestamp TIMESTAMPTZ NOT NULL,
+                              FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE
 );
 
-ALTER TABLE item ADD CONSTRAINT FK_item_price FOREIGN KEY (id) REFERENCES price (id) ON DELETE CASCADE;
-
+INSERT INTO users(id, name)
+VALUES (1, 'SomeHappyUser');
 
 INSERT INTO site(id, display_name, enabled, value)
-VALUES (1, 'Dollskill', true, 'DOLLSKILL')
+VALUES (1, 'Dollskill', true, 'DOLLSKILL');
+
+INSERT INTO item(id, name, url, site_id)
+VALUES (1, 'obsidian-pocket-combat-boots', 'https://www.dollskill.com/products/obsidian-pocket-combat-boots', 1);
+
+INSERT INTO item_details(id, item_id, price, timestamp, size, size_type, currency)
+VALUES (1, 1, 100.00, '2023-09-01 20:00:00'::TIMESTAMPTZ, 10, 'UK', 'USD');
+
+INSERT INTO user_item(user_id, item_id)
+VALUES (1, 1);

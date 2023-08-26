@@ -4,7 +4,6 @@ import com.example.stealer.enums.SiteName;
 import com.example.stealer.exception.NoParserForSiteException;
 import com.example.stealer.mapper.ItemMapper;
 import com.example.stealer.model.Item;
-import com.example.stealer.model.Site;
 import com.example.stealer.service.ItemService;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -30,11 +29,11 @@ public class ParsingTask implements Runnable {
 
         var inputItems = getItemsToParse();
 
-        var results = parseItems(inputItems);
+        //var results = parseItems(inputItems);
         //TODO extract everything about parsing to parsing service
         //TODO rename ParsingTask
-        results.forEach(System.out::println);
-
+        //results.forEach(System.out::println);
+        inputItems.forEach(System.out::println);
         //results.stream().map(ItemParsingResult::getItem).forEach(itemService::update);
         //driver.quit(); //TODO check quitting driver
     }
@@ -44,23 +43,14 @@ public class ParsingTask implements Runnable {
         return inputItems.stream()
                 .filter(input -> input.getSite().getEnabled())
                 .peek(input -> {
-                    var parserForInput = getParserBySiteName(parsers, input.getSite().getSiteName());
+                    var parserForInput = getParserBySiteName(parsers, input.getSite().getValue());
                     var result = parserForInput.execute(input.getUrl());
                     itemMapper.updateModel(input, result);
                 }).toList();
     }
 
     private List<Item> getItemsToParse() {
-        var inputItems= itemService.findAll();
-        inputItems.add(Item.builder()
-                .id(1L)
-                .url("https://www.dollskill.com/products/obsidian-pocket-combat-boots")
-                .site(Site.builder()
-                        .siteName(SiteName.DOLLSKILL)
-                        .enabled(true)
-                        .build())
-                .build());
-        return inputItems;
+        return itemService.findAll();
     }
 
     private static Parser getParserBySiteName(List<Parser> parsers, SiteName siteName) {

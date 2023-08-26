@@ -1,6 +1,6 @@
 package com.example.stealer.service.impl;
 
-import com.example.stealer.mapper.ItemEntityMapper;
+import com.example.stealer.mapper.entity.ItemEntityMapper;
 import com.example.stealer.model.Item;
 import com.example.stealer.repo.ItemRepo;
 import com.example.stealer.service.ItemService;

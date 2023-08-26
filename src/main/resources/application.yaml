@@ -10,8 +10,8 @@ spring:
 scheduling:
     core-pool-size: 1
     initial-delay: 0
-    period: 1
-    time-unit: MINUTES
+    period: 5
+    time-unit: SECONDS
 
 web-driver:
     type: webdriver.chrome.driver
