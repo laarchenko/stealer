@@ -29,7 +29,7 @@ public abstract class Parser {
             driver.get(itemUrl);
             return ItemParsingResult.builder()
                     .name(getName())
-                    .itemDetails(getItemDetails())
+                    .itemDetails(getItemDetailsList())
                     .pictureUrl(getPictureUrl())
                     .build();
         } catch (ApplicationException e) {
@@ -41,7 +41,7 @@ public abstract class Parser {
 
     protected abstract String getName();
 
-    protected abstract List<ItemDetails> getItemDetails();
+    protected abstract List<ItemDetails> getItemDetailsList();
 
     protected abstract String getPictureUrl();
 }

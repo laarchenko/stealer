@@ -4,5 +4,5 @@ import com.example.stealer.model.Site;
 
 public interface SiteService {
 
-    Site resolveSiteByUrl(String url);
+    Site resolveSiteByUrl(String itemUrl);
 }

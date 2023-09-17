@@ -10,19 +10,11 @@ import java.util.List;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Item {
-
-    Long id;
-
-    String url;
-
-    List<ItemDetails> itemDetails;
-
-    String name;
-
-    String pictureUrl;
-
-    Site site;
+public class ItemComparisonResult {
 
     List<User> users;
+
+    List<ItemDetails> newSizes;
+
+    List<ItemDetails> newPrices;
 }

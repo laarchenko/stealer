@@ -32,3 +32,5 @@ build/
 .vscode/
 
 .gradle
+/gradle
+.mvn

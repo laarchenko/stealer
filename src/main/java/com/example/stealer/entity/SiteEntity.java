@@ -33,5 +33,7 @@ public class SiteEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemEntity> items;
+
+    //TODO Add url
 }
 

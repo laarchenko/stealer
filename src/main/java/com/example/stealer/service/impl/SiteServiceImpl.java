@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 public class SiteServiceImpl implements SiteService {
 
     @Override
-    public Site resolveSiteByUrl(String url) {
-        return null;
+    public Site resolveSiteByUrl(String itemUrl) {
+        //TODO Implement
+        return Site.builder().build();
     }
 }

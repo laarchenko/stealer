@@ -36,7 +36,7 @@ public class ItemDetailsEntity {
     Currency currency;
 
     @Column(name = "size")
-    Long size;
+    Integer size;
 
     @Column(name = "size_type")
     @Enumerated(EnumType.STRING)

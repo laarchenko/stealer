@@ -13,6 +13,8 @@ import java.util.List;
 @Builder
 public class ItemParsingResult {
 
+    Long itemId;
+
     List<ItemDetails> itemDetails;
 
     String name;

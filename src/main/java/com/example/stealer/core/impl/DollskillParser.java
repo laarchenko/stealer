@@ -1,6 +1,7 @@
 package com.example.stealer.core.impl;
 
 import com.example.stealer.core.Parser;
+import com.example.stealer.enums.Currency;
 import com.example.stealer.enums.SiteName;
 import com.example.stealer.enums.SizeType;
 import com.example.stealer.exception.ItemNameNotFoundException;
@@ -13,6 +14,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +30,8 @@ public class DollskillParser extends Parser {
         super(SiteName.DOLLSKILL, driver);
     }
 
+    private record SizesSizeType(List<Integer> sizes, SizeType sizeType){}
+
     @Override
     protected String getName() {
         var nameElementByStrictXpath = findElementBy(By.xpath("/html/body/div[7]/main/div/div[1]/div[2]/div/h1"));//full
@@ -42,10 +46,19 @@ public class DollskillParser extends Parser {
     }
 
     @Override
-    protected List<ItemDetails> getItemDetails() {
-        return List.of(ItemDetails.builder()
-                .price(getPriceValue())
-                .build());
+    protected List<ItemDetails> getItemDetailsList() {
+        var sizesSizeType = resolveSizesSizeType();
+        var price = getPriceValue();
+        var sizeType = sizesSizeType.sizeType;
+        var timestamp = Instant.now();
+        return sizesSizeType.sizes.stream().map(size -> ItemDetails.builder()
+                .price(price)
+                .size(size)
+                .sizeType(sizeType)
+                .timestamp(timestamp)
+                .currency(Currency.USD)
+                .build())
+                .collect(Collectors.toList());
     }
 
     protected BigDecimal getPriceValue() {
@@ -63,10 +76,10 @@ public class DollskillParser extends Parser {
         return BigDecimal.valueOf(Double.parseDouble( removeSymbol((extractPriceValue(priceAsString)), "$")));
     }
 
-    protected void getSize() {
+    protected SizesSizeType resolveSizesSizeType() {
         WebElement sizes = driver.findElement(By.id("cart-options"));
-        var sizeList = sizes.findElements(By.className("shorthand"));//TODO Merge to itemDetails
-        //return Size.of(resolveSizeType(sizeList), resolveSizeValues(sizeList));
+        var sizeList = sizes.findElements(By.className("shorthand"));
+        return new SizesSizeType(resolveSizeValues(sizeList),resolveSizeType(sizeList));
     }
 
     private static List<Integer> resolveSizeValues(List<WebElement> sizeList) {
@@ -85,7 +98,6 @@ public class DollskillParser extends Parser {
     @Override
     protected String getPictureUrl() {
         WebElement picture = driver.findElement(By.cssSelector("#image-container > div:nth-child(1) > a"));
-        System.out.println("PIC " + picture.getAttribute("href"));
         return "PIC " + picture.getAttribute("href");//TODO maybe parse few pictures
     }
 

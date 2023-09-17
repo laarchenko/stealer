@@ -21,7 +21,7 @@ public class ItemDetails {
 
     Currency currency;
 
-    Long size;
+    Integer size;
 
     SizeType sizeType;
 

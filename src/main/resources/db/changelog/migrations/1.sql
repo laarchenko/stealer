@@ -46,7 +46,7 @@ INSERT INTO item(id, name, url, site_id)
 VALUES (1, 'obsidian-pocket-combat-boots', 'https://www.dollskill.com/products/obsidian-pocket-combat-boots', 1);
 
 INSERT INTO item_details(id, item_id, price, timestamp, size, size_type, currency)
-VALUES (1, 1, 100.00, '2023-09-01 20:00:00'::TIMESTAMPTZ, 10, 'UK', 'USD');
+VALUES (10, 1, 100.00, '2023-09-01 20:00:00'::TIMESTAMPTZ, 10, 'UK', 'USD');
 
 INSERT INTO user_item(user_id, item_id)
 VALUES (1, 1);
