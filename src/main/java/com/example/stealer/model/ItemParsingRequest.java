@@ -15,7 +15,5 @@ public class ItemParsingRequest {
 
     String url;
 
-    Boolean enabled;
-
     SiteName siteName;
 }

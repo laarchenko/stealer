@@ -9,6 +9,7 @@ import com.example.stealer.mapper.entity.ItemEntityMapper;
 import com.example.stealer.mapper.entity.UserEntityMapper;
 import com.example.stealer.model.*;
 import com.example.stealer.repo.ItemRepo;
+import com.example.stealer.repo.SiteRepo;
 import com.example.stealer.service.ItemService;
 import com.example.stealer.service.NotificationService;
 import com.example.stealer.service.SiteService;
@@ -19,9 +20,11 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,8 @@ public class ItemServiceImpl implements ItemService {
     private final UserEntityMapper userEntityMapper;
     private final NotificationService notificationService;
     private final UserService userService;
+
+    private final SiteRepo siteRepo;
 
     @Override
     @Transactional
@@ -52,6 +57,16 @@ public class ItemServiceImpl implements ItemService {
         } else {
             create(itemUrl, userId);
         }
+    }
+
+    public Stream<Item> findBySite(Site site) {
+        return siteRepo.findById(site.getId()).orElseThrow()
+                .getItems().stream()
+                .map(itemEntity -> {
+                    var item = itemEntityMapper.toModel(itemEntity);
+                    item.setUrl(site.getUrl() + item.getUrl());
+                    return item;
+                });
     }
 
     private String shortUrl(String itemUrl) {
@@ -84,20 +99,20 @@ public class ItemServiceImpl implements ItemService {
                 .build();
 
         var toSaveItemEntity = itemEntityMapper.toEntity(itemModel);
-        addUser(toSaveItemEntity, userId);
+        //addUser(toSaveItemEntity, userId);
         itemRepo.save(toSaveItemEntity);
     }
 
     private void addUser(ItemEntity toSaveItemEntity, Long userId) {
 
-        var userEntity = userEntityMapper.toEntity(userService.findById(userId));
-        toSaveItemEntity.getUsers().add(userEntity);
+        //var userEntity = userEntityMapper.toEntity(userService.findById(userId));
+        //toSaveItemEntity.getUsers().add(userEntity);
     }
 
     @Transactional
     private void processParsingResult(ItemParsingResult newItem) {
         var initialItemEntity = itemRepo.findById(newItem.getItemId())
-                .orElseThrow(() -> new ItemNotFoundException(newItem.getItemId()));
+                .orElseThrow(() -> new ItemNotFoundException(newItem.getItemId()));//TODO do i really need exception ? or just log
         var initialItem = itemEntityMapper.toModel(initialItemEntity);
         itemEntityMapper.updateFromItemParsingResult(initialItemEntity, newItem);
         updateItemDetails(initialItemEntity, newItem.getItemDetails());
@@ -153,6 +168,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemParsingRequest> getItemParsingRequests() {
-        return itemRepo.findAll().stream().map(itemParsingMapper::toRequest).collect(Collectors.toList());
+
+        var itemParsingRequests = new java.util.ArrayList<ItemParsingRequest>(Collections.emptyList());
+
+        var sites = siteService.getAllEnabled();
+        sites.forEach(site -> {
+            var items = findBySite(site);
+            itemParsingRequests.addAll(items.map(itemParsingMapper::toRequest).toList());
+        });
+        return itemParsingRequests;
     }
 }

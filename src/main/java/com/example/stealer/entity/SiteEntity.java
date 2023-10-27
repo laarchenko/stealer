@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "site")
+@Table(name = "sites")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SiteEntity {
 
@@ -34,6 +34,7 @@ public class SiteEntity {
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemEntity> items;
 
-    //TODO Add url
+    @Column(name = "url")
+    String url;
 }
 

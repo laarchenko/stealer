@@ -19,7 +19,6 @@ public class ParsingServiceImpl implements ParsingService {
 
     public List<ItemParsingResult> executeParsing(List<ItemParsingRequest> itemParsingRequests) {
         return itemParsingRequests.stream()
-                .filter(ItemParsingRequest::getEnabled)
                 .map(input -> {
                     var parserForInput = getParserBySiteName(parsers, input.getSiteName());
                     var result = parserForInput.execute(input.getUrl());

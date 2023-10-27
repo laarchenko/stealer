@@ -1,5 +1,6 @@
 package com.example.stealer.model;
 
+import com.example.stealer.enums.SiteName;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,8 @@ public class Item {
     List<ItemDetails> itemDetails;
 
     String name;
+
+    SiteName siteName;
 
     String pictureUrl;
 

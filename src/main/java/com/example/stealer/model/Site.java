@@ -14,6 +14,8 @@ public class Site {
 
     String displayName;
 
+    String url;
+
     Boolean enabled;
 
     SiteName value;

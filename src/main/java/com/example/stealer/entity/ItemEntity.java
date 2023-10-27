@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "item")
+@Table(name = "items")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemEntity {
 
@@ -32,10 +32,11 @@ public class ItemEntity {
     @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false)
     SiteEntity site;
 
+    @Column(name = "url", nullable = false)
+    String url;
+
     @HashCodeExclude
     @ToString.Exclude
-    @ManyToMany(mappedBy = "items", fetch = FetchType.EAGER)
-    List<UserEntity> users;
-
-    String url;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
+    private List<SubscriptionEntity> subscriptions;
 }

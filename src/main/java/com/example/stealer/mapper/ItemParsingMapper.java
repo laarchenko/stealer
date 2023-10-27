@@ -1,6 +1,5 @@
 package com.example.stealer.mapper;
 
-import com.example.stealer.entity.ItemEntity;
 import com.example.stealer.model.Item;
 import com.example.stealer.model.ItemParsingRequest;
 import com.example.stealer.model.ItemParsingResult;
@@ -13,9 +12,8 @@ public interface ItemParsingMapper {
 
     void updateModel(@MappingTarget Item item, ItemParsingResult itemParsingResult);
 
-    @Mapping(target = "enabled", source = "site.enabled")
     @Mapping(target = "siteName", source = "site.value")
-    ItemParsingRequest toRequest(ItemEntity entity);
+    ItemParsingRequest toRequest(Item model);
 
     Item toModel(ItemParsingResult result);
 }

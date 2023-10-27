@@ -3,9 +3,7 @@ package com.example.stealer.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.List;
 
@@ -21,12 +19,11 @@ public class UserEntity {
 
     String name;
 
-    @HashCodeExclude
-    @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
-            name = "user_item",
+            name = "user_subscription",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id"))
-    List<ItemEntity> items;
+            inverseJoinColumns = @JoinColumn(name = "subscription_id")
+    )
+    List<SubscriptionEntity> subscriptions;
 }
