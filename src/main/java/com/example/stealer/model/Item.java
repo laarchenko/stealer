@@ -27,5 +27,5 @@ public class Item {
 
     Site site;
 
-    List<User> users;
+    List<Subscription> subscriptions;
 }

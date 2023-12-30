@@ -48,11 +48,12 @@ public class DollskillParser extends Parser {
     @Override
     protected List<ItemDetails> getItemDetailsList() {
         var sizesSizeType = resolveSizesSizeType();
-        var price = getPriceValue();
+        //var price = getPriceValue(); TODO
         var sizeType = sizesSizeType.sizeType;
         var timestamp = Instant.now();
         return sizesSizeType.sizes.stream().map(size -> ItemDetails.builder()
-                .price(price)
+                //.price(price) TODO fix
+                        .price(BigDecimal.valueOf(30))
                 .size(size)
                 .sizeType(sizeType)
                 .timestamp(timestamp)

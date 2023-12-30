@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/stealer
+    username: postgres
+    password: password
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    drop-first: true
+
+scheduling:
+  core-pool-size: 1
+  initial-delay: 60
+  period: 5
+  time-unit: SECONDS
+
+web-driver:
+  type: webdriver.chrome.driver
+  location: /home/vampir/soft/chromedriver
+  args: >
+    --remote-allow-origins=*,
+    --headless

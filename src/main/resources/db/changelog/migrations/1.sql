@@ -58,4 +58,4 @@ INSERT INTO user_subscription (user_id, subscription_id)
 VALUES (1, 1);
 
 INSERT INTO item_details (item_id, price, timestamp, size, size_type, currency)
-VALUES (1, 100.00, '2023-09-01 20:00:00'::TIMESTAMPTZ, 10, 'UK', 'USD');
+VALUES (1, 200.00, '2023-09-01 20:00:00'::TIMESTAMPTZ, 10, 'UK', 'USD');

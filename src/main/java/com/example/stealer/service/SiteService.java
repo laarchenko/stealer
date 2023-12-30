@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SiteService {
 
-    Site resolveSiteByUrl(String itemUrl);
+    Site getSiteByItemUrl(String itemUrl);
 
     List<Site> getAllEnabled();
 }

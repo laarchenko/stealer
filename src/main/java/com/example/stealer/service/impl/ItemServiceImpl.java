@@ -1,11 +1,14 @@
 package com.example.stealer.service.impl;
 
 import com.example.stealer.entity.ItemEntity;
+import com.example.stealer.entity.SubscriptionEntity;
+import com.example.stealer.enums.SubscriptionType;
 import com.example.stealer.exception.InvalidUrlException;
 import com.example.stealer.exception.ItemNotFoundException;
 import com.example.stealer.mapper.ItemParsingMapper;
 import com.example.stealer.mapper.entity.ItemDetailsEntityMapper;
 import com.example.stealer.mapper.entity.ItemEntityMapper;
+import com.example.stealer.mapper.entity.SiteEntityMapper;
 import com.example.stealer.mapper.entity.UserEntityMapper;
 import com.example.stealer.model.*;
 import com.example.stealer.repo.ItemRepo;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +40,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemDetailsEntityMapper itemDetailsEntityMapper;
     private final ItemParsingMapper itemParsingMapper;
     private final UserEntityMapper userEntityMapper;
+    private final SiteEntityMapper siteEntityMapper;
     private final NotificationService notificationService;
     private final UserService userService;
 
@@ -90,23 +95,41 @@ public class ItemServiceImpl implements ItemService {
         itemRepo.save(entity);
     }
 
+    @Transactional
     private void create(String itemUrl, Long userId) {
 
-        var siteModel = siteService.resolveSiteByUrl(itemUrl);
+        var siteModel = siteService.getSiteByItemUrl(itemUrl);
+        var siteEntity = siteEntityMapper.toEntity(siteModel);
         var itemModel = Item.builder()
                 .url(itemUrl)
                 .site(siteModel)
+                .itemDetails(Collections.emptyList())
+                .subscriptions(Collections.emptyList())//TODO Add user
+                //.pictureUrl() TODO resolvePictureUrl
+                .name("")//TODO resolve name
                 .build();
 
         var toSaveItemEntity = itemEntityMapper.toEntity(itemModel);
-        //addUser(toSaveItemEntity, userId);
+        toSaveItemEntity.setSite(siteEntity);
+        addUser(toSaveItemEntity, userId);
         itemRepo.save(toSaveItemEntity);
     }
 
+    @Transactional
     private void addUser(ItemEntity toSaveItemEntity, Long userId) {
 
-        //var userEntity = userEntityMapper.toEntity(userService.findById(userId));
-        //toSaveItemEntity.getUsers().add(userEntity);
+        var userEntity = userEntityMapper.toEntity(userService.findById(userId));
+        var subscriptions = toSaveItemEntity.getSubscriptions();
+        subscriptions.add(SubscriptionEntity.builder()
+                        .item(toSaveItemEntity)
+                        .type(SubscriptionType.PRICEDROP)
+                        .users(List.of())//TODO Add user
+                .build());
+        subscriptions.add(SubscriptionEntity.builder()
+                .item(toSaveItemEntity)
+                .type(SubscriptionType.SIZE_AVAILABLE)
+                .users(List.of())//TODO Add user
+                .build());
     }
 
     @Transactional
@@ -125,7 +148,15 @@ public class ItemServiceImpl implements ItemService {
         var newSizes = checkOnNewSizes(newItem.getItemDetails(), initialItem.getItemDetails());
         var newPrices = checkOnNewPrices(newItem.getItemDetails(), initialItem.getItemDetails());
 
-        notificationService.processItemComparisonResult(ItemComparisonResult.builder().users(initialItem.getUsers()).newSizes(newSizes).newPrices(newPrices).build());
+        initialItem.getSubscriptions().forEach(
+                subscription -> {
+                    switch (subscription.getType()) {
+                        case PRICEDROP -> notificationService.processItemComparisonResult(ItemComparisonResult.builder().users(subscription.getUsers()).newPrices(newPrices).build(), SubscriptionType.PRICEDROP);
+                        case SIZE_AVAILABLE -> notificationService.processItemComparisonResult(ItemComparisonResult.builder().users(subscription.getUsers()).newSizes(newSizes).build(), SubscriptionType.SIZE_AVAILABLE);
+                        default -> throw new RuntimeException();//TODO Add exception
+                    }
+                }
+        );
     }
 
     private List<ItemDetails> checkOnNewPrices(List<ItemDetails> newItemDetails, List<ItemDetails> initialItemDetails) {
@@ -167,9 +198,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public List<ItemParsingRequest> getItemParsingRequests() {
 
-        var itemParsingRequests = new java.util.ArrayList<ItemParsingRequest>(Collections.emptyList());
+        var itemParsingRequests = new ArrayList<ItemParsingRequest>();
 
         var sites = siteService.getAllEnabled();
         sites.forEach(site -> {

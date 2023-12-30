@@ -27,10 +27,10 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-validation")
     implementation ("org.springframework.boot:spring-boot-starter-actuator")
     implementation ("org.springframework.boot:spring-boot-starter-aop")
-    implementation ("org.springframework.boot:spring-boot-starter-security")
+    implementation ("org.springframework.boot:spring-boot-starter-cache")
+    //implementation ("org.springframework.boot:spring-boot-starter-security")
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation ("org.mapstruct:mapstruct:1.5.5.Final")
-    implementation ("org.liquibase:liquibase-core")
     implementation ("org.liquibase:liquibase-core")
     implementation ("io.github.openfeign:feign-core:12.3")
     implementation ("org.seleniumhq.selenium:selenium-java:3.141.59")
@@ -42,9 +42,8 @@ dependencies {
 
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("io.github.glytching:junit-extensions:2.6.0")
-    testImplementation ("org.testcontainers:testcontainers:1.18.3")
-    testImplementation ("org.testcontainers:postgresql:1.18.3")
     testImplementation ("io.rest-assured:json-schema-validator:5.3.0")
+    testImplementation("io.rest-assured:spring-mock-mvc:3.0.0")
     testImplementation (files("src/test/resources"))
 }
 

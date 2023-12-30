@@ -3,20 +3,15 @@ package com.example.stealer.mapper.entity;
 import com.example.stealer.entity.ItemDetailsEntity;
 import com.example.stealer.entity.ItemEntity;
 import com.example.stealer.entity.SiteEntity;
-import com.example.stealer.model.Item;
-import com.example.stealer.model.ItemDetails;
-import com.example.stealer.model.ItemParsingResult;
-import com.example.stealer.model.Site;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+import com.example.stealer.entity.SubscriptionEntity;
+import com.example.stealer.model.*;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(uses = UserEntityMapper.class)
+@Mapper(uses = {UserEntityMapper.class, SubscriptionEntityMapper.class})
 public abstract class ItemEntityMapper {
 
     @Autowired
@@ -24,6 +19,12 @@ public abstract class ItemEntityMapper {
 
     @Autowired
     SiteEntityMapper siteEntityMapper;
+
+    @Autowired
+    SubscriptionEntityMapper subscriptionEntityMapper;
+
+    @Autowired
+    UserEntityMapper userEntityMapper;
 
     @Mapping(target = "itemDetails", source = "itemDetails", qualifiedByName = "mapItemDetailsToEntities")
     @Mapping(target = "site", source = "site", qualifiedByName = "mapSiteToEntity")
@@ -34,6 +35,7 @@ public abstract class ItemEntityMapper {
 
     @Mapping(target = "itemDetails", source = "itemDetails", qualifiedByName = "mapItemDetails")
     @Mapping(target = "site", source = "site", qualifiedByName = "mapSite")
+    @Mapping(target = "subscriptions", source = "subscriptions", qualifiedByName = "mapSubscriptions")
     public abstract Item toModel(ItemEntity entity);
 
     @Named("mapItemDetailsToEntities")
@@ -54,5 +56,19 @@ public abstract class ItemEntityMapper {
     @Named("mapSite")
     protected Site mapSite(SiteEntity entity) {
         return siteEntityMapper.toModel(entity);
+    }
+
+    @Named("mapSubscriptions")
+    protected List<Subscription> mapSubscriptions(List<SubscriptionEntity> entities) {
+        return entities.stream().map(entity -> {
+            var model = subscriptionEntityMapper.toModelWithoutCyclingFields(entity);
+            model.setUsers(userEntityMapper.toModel(entity.getUsers()));
+            return model;
+        }).collect(Collectors.toList());
+    };
+
+    @AfterMapping void setCycleFields(@MappingTarget Item model) {
+        model.getSubscriptions().forEach(subscription ->
+                subscription.setItem(model));
     }
 }

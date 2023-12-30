@@ -28,7 +28,8 @@ public abstract class Parser {
         try {
             driver.get(itemUrl);
             return ItemParsingResult.builder()
-                    .name(getName())
+                    //.name(getName()) TODO fix for dollskill
+                    .name("default")
                     .itemDetails(getItemDetailsList())
                     .pictureUrl(getPictureUrl())
                     .build();
