@@ -13,6 +13,11 @@ scheduling:
     period: 5
     time-unit: SECONDS
 
+client:
+  telegram:
+    token: 6718615604:AAGDmY3cGK68E5hdOrYTrXkJfdph72rSe_s
+    username: sstealerr_bot
+
 web-driver:
     type: webdriver.chrome.driver
     location: /home/vampir/soft/chromedriver

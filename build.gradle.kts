@@ -34,6 +34,7 @@ dependencies {
     implementation ("org.liquibase:liquibase-core")
     implementation ("io.github.openfeign:feign-core:12.3")
     implementation ("org.seleniumhq.selenium:selenium-java:3.141.59")
+    implementation("org.telegram:telegrambots:6.8.0")
 
     runtimeOnly ("org.postgresql:postgresql")
     testCompileOnly ("org.projectlombok:lombok:1.18.28")
