@@ -15,7 +15,10 @@ CREATE TABLE items (
 
 CREATE TABLE users (
                        id SERIAL PRIMARY KEY,
-                       name VARCHAR(255) NOT NULL
+                       name VARCHAR(255) NOT NULL,
+                       lastname VARCHAR(255) NULL,
+                       telegram_id BIGINT NOT NULL,
+                       telegram_username VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE subscriptions (
@@ -48,8 +51,8 @@ VALUES ('Dollskill', true, 'DOLLSKILL', 'https://www.dollskill.com');
 INSERT INTO items (name, site_id, url)
 VALUES ('obsidian-pocket-combat-boots', 1, '/products/obsidian-pocket-combat-boots');
 
-INSERT INTO users (name)
-VALUES ('Sample User');
+INSERT INTO users (name, lastname, telegram_id, telegram_username)
+VALUES ('Sample User', 'smb',  1, 'smb');
 
 INSERT INTO subscriptions (type, item_id)
 VALUES ('PRICEDROP', 1);

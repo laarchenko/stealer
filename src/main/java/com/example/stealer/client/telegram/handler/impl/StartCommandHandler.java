@@ -4,9 +4,10 @@ import com.example.stealer.client.telegram.handler.UserRequestHandler;
 import com.example.stealer.client.telegram.helper.KeyboardHelper;
 import com.example.stealer.client.telegram.model.UserRequest;
 import com.example.stealer.client.telegram.service.TelegramService;
+import com.example.stealer.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 @Component
 @RequiredArgsConstructor
@@ -14,7 +15,9 @@ public class StartCommandHandler extends UserRequestHandler {
 
     private static final String command = "/start";
     private final TelegramService telegramService;
+    private final UserService userService;
     private final KeyboardHelper keyboardHelper;
+    private final ResourceBundleMessageSource messageSource;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -23,12 +26,11 @@ public class StartCommandHandler extends UserRequestHandler {
 
     @Override
     public void handle(UserRequest request) {
-        ReplyKeyboard replyKeyboard = keyboardHelper.buildMainMenu();
+
+        userService.save(request.getUser());
+
         telegramService.sendMessage(request.getChatId(),
-                "\uD83D\uDC4BПривіт! За допомогою цього чат-бота ви зможете зробити запит про допомогу!",
-                replyKeyboard);
-        telegramService.sendMessage(request.getChatId(),
-                "Обирайте з меню нижче ⤵️");
+                messageSource.getMessage("greeting", null, request.getUser().getLocale()));
     }
 
     @Override

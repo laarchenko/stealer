@@ -1,5 +1,6 @@
 package com.example.stealer.client.telegram.model;
 
+import com.example.stealer.model.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserRequest {
 
+    User user;
     Long chatId;
     Update update;
 }

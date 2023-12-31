@@ -18,4 +18,9 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) {
         return userRepo.findById(id).map(userEntityMapper::toModel).orElseThrow();//TODO UserNotFound exception
     }
+
+    @Override
+    public void save(User user) {
+        userRepo.save(userEntityMapper.toEntity(user));
+    }
 }

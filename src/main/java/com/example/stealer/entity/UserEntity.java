@@ -17,7 +17,19 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(name = "name", nullable = false)
     String name;
+
+    @Column(name = "lastname", nullable = true)
+    String lastname;
+
+    //String locale;//TODO add locale
+
+    @Column(name = "telegram_username", nullable = false)
+    String telegramUsername;
+
+    @Column(name = "telegram_id", nullable = false)
+    Long telegramId;
 
     @ManyToMany
     @JoinTable(
